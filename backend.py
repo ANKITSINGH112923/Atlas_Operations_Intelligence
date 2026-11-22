@@ -492,17 +492,17 @@ class SOPKnowledgeBase:
 
 
 def _get_llm():
-    key = os.getenv("DEEPSEEK_API_KEY", "").strip()
+    key = (os.getenv("LLM_API_KEY") or os.getenv("DEEPSEEK_API_KEY") or "").strip()
     if not key or key.startswith("your_"):
-        raise AtlasError("DEEPSEEK_API_KEY is not configured. Copy .env.example to .env and add your key.")
+        raise AtlasError("LLM_API_KEY is not configured. Copy .env.example to .env and add your key.")
     try:
         from langchain_openai import ChatOpenAI
     except ImportError as exc:
         raise AtlasError("langchain-openai is not installed. Run: pip install -r requirements.txt") from exc
     return ChatOpenAI(
-        model=os.getenv("DEEPSEEK_MODEL", "deepseek-chat"),
+        model=os.getenv("LLM_MODEL") or os.getenv("DEEPSEEK_MODEL", "llama-3.3-70b-versatile"),
         api_key=key,
-        base_url=os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com"),
+        base_url=os.getenv("LLM_BASE_URL") or os.getenv("DEEPSEEK_BASE_URL", "https://api.groq.com/openai/v1"),
         temperature=0, timeout=60, max_retries=1)
 
 
