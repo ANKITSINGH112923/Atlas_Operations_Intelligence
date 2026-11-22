@@ -9,8 +9,8 @@ Local AI assistant for the fictional Northstar Systems Operations Team. It combi
 It is an analytics/reporting assistant, not a ticketing or forecasting system.
 
 ## 15-Minute Video Explanation
-<!-- TODO: paste your video link here -->
 
+https://drive.google.com/file/d/1Qokh9BUycoSvpCfmEngF_W0Dpiqd6ZXU/view?usp=sharing
 ## Architecture
 ```
  CSV/Excel ──► validate_issues ──► pandas metrics ──┐
