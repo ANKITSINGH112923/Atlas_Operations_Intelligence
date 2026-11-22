@@ -576,8 +576,8 @@ def generate_report_html(df: pd.DataFrame | None) -> str:
         raise AtlasError("No validated operational data is available. Upload and validate the issue file first.")
     m = compute_metrics(df)
     e = html.escape
-    th = "padding:8px 12px;border:1px solid #d0d7e2;background:#eef2f8;text-align:left;font-size:14px;"
-    td = "padding:8px 12px;border:1px solid #d0d7e2;font-size:14px;"
+    th = "padding:8px 12px;border:1px solid #d0d7e2;background:#eef2f8;color:#14284b;text-align:left;font-size:14px;"
+    td = "padding:8px 12px;border:1px solid #d0d7e2;font-size:14px;color:#1d2a3f;"
 
     def rows(d: dict, bold: str | None = None) -> str:
         return "".join(
@@ -595,7 +595,7 @@ def generate_report_html(df: pd.DataFrame | None) -> str:
 
     avg = (f"{m['avg_resolution_hours']:.2f} hours" if m["avg_resolution_hours"] is not None
            else "Unavailable (no completed issues with a valid resolution time)")
-    findings = "".join(f"<li style='margin-bottom:6px;'>{x}</li>" for x in business_findings(m))
+    findings = "".join(f"<li style='color:#1d2a3f;margin-bottom:6px;'>{x}</li>" for x in business_findings(m))
     kpi = lambda label, val: (f"<td style='padding:12px;border:1px solid #d0d7e2;background:#f7f9fc;"
                               f"text-align:center;'><div style='font-size:12px;color:#5a6b85;'>{label}</div>"
                               f"<div style='font-size:22px;font-weight:bold;color:#14284b;'>{val}</div></td>")
@@ -603,31 +603,31 @@ def generate_report_html(df: pd.DataFrame | None) -> str:
     return f"""<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>{REPORT_TITLE}</title></head>
 <body style="margin:0;padding:0;background:#f0f3f8;font-family:Arial,Helvetica,sans-serif;color:#1d2a3f;">
-<div style="max-width:720px;margin:0 auto;background:#ffffff;padding:28px 32px;">
+<div style="max-width:720px;margin:0 auto;background:#ffffff;color:#1d2a3f;padding:28px 32px;">
 <h1 style="margin:0;font-size:24px;color:#14284b;">{REPORT_TITLE}</h1>
-<p style="margin:4px 0 0;color:#5a6b85;font-size:13px;">Northstar Systems &middot; Generated {datetime.now():%Y-%m-%d %H:%M}</p>
+<p style="color:#1d2a3f;margin:4px 0 0;color:#5a6b85;font-size:13px;">Northstar Systems &middot; Generated {datetime.now():%Y-%m-%d %H:%M}</p>
 
 {section('Reporting Period')}
-<p style="font-size:15px;margin:0;">{e(m['period_start'])} to {e(m['period_end'])}</p>
+<p style="color:#1d2a3f;font-size:15px;margin:0;">{e(m['period_start'])} to {e(m['period_end'])}</p>
 
 {section('Total Reported Issues')}
 <table style="border-collapse:collapse;width:100%;"><tr>{kpi('Total issues', m['total'])}{kpi('Unresolved', m['unresolved'])}{kpi('Completed', m['completed'])}{kpi('Avg resolution (h)', f"{m['avg_resolution_hours']:.2f}" if m['avg_resolution_hours'] is not None else 'n/a')}</tr></table>
 
 {section('Issue Status Summary')}
 {table('Status', 'Issues', rows(m['status']))}
-<p style="font-size:13px;color:#5a6b85;">Unresolved = Open + In Progress ({m['unresolved']}). Completed = Resolved + Closed ({m['completed']}).</p>
+<p style="color:#1d2a3f;font-size:13px;color:#5a6b85;">Unresolved = Open + In Progress ({m['unresolved']}). Completed = Resolved + Closed ({m['completed']}).</p>
 
 {section('Leading Issue Category')}
-<p style="font-size:15px;margin:0 0 8px;"><strong>{e(cat['name'])}</strong> &mdash; {cat['count']} issues</p>
+<p style="color:#1d2a3f;font-size:15px;margin:0 0 8px;"><strong>{e(cat['name'])}</strong> &mdash; {cat['count']} issues</p>
 {table('Category', 'Issues', rows(m['category_counts'], cat['name']))}
 
 {section('Team Workload')}
-<p style="font-size:15px;margin:0 0 8px;"><strong>{e(tm['name'])}</strong> has the highest issue count ({tm['count']} issues).</p>
+<p style="color:#1d2a3f;font-size:15px;margin:0 0 8px;"><strong>{e(tm['name'])}</strong> has the highest issue count ({tm['count']} issues).</p>
 {table('Team', 'Issues', rows(m['team_counts'], tm['name']))}
 
 {section('Average Resolution Time')}
-<p style="font-size:15px;margin:0;"><strong>{avg}</strong></p>
-<p style="font-size:13px;color:#5a6b85;">Mean of resolution_time_hours for Resolved and Closed issues with valid values ({m['avg_resolution_n']} issues). Unresolved issues are excluded.</p>
+<p style="color:#1d2a3f;font-size:15px;margin:0;"><strong>{avg}</strong></p>
+<p style="color:#1d2a3f;font-size:13px;color:#5a6b85;">Mean of resolution_time_hours for Resolved and Closed issues with valid values ({m['avg_resolution_n']} issues). Unresolved issues are excluded.</p>
 
 {section('Additional Analysis: Monthly Issue Counts')}
 {table('Month', 'Issues', rows(m['monthly_counts']))}
@@ -636,9 +636,9 @@ def generate_report_html(df: pd.DataFrame | None) -> str:
 {table('Region', 'Issues', rows(m['region_counts']))}
 
 {section('Business Findings')}
-<ul style="font-size:14px;line-height:1.5;padding-left:20px;margin:0;">{findings}</ul>
+<ul style="color:#1d2a3f;font-size:14px;line-height:1.5;padding-left:20px;margin:0;">{findings}</ul>
 
-<p style="margin-top:30px;font-size:11px;color:#8a97ad;border-top:1px solid #d0d7e2;padding-top:10px;">
+<p style="color:#1d2a3f;margin-top:30px;font-size:11px;color:#8a97ad;border-top:1px solid #d0d7e2;padding-top:10px;">
 All figures are calculated from the uploaded issue records using pandas. Fictional data for demonstration.</p>
 </div></body></html>"""
 
